@@ -1,25 +1,22 @@
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import { TransformControls } from "@react-three/drei";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 const SectionPlanes = () => {
     const planeRef = useRef(new THREE.Plane(new THREE.Vector3(0, -1, 0), 0));
-    const helperRef = useRef(null);
     const meshRef = useRef(null);
 
     useFrame(() => {
         if (!meshRef.current) return;
-        console.log("i am in use frame")
         meshRef.current.updateMatrixWorld();
         const position = new THREE.Vector3();
         meshRef.current.getWorldPosition(position);
-        console.log("helper ref's  position",position);
         planeRef.current.constant = position.y; // because normal is (0, -1, 0)
     })
 
     return (
         <>  
-            <TransformControls mode="translate" ref={helperRef}>
+            <TransformControls mode="translate">
                 <mesh ref={meshRef} visible={false}>
                     <boxGeometry args={[10, 10, 0.1]} />
                     <meshStandardMaterial color="red" />
