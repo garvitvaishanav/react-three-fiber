@@ -1,38 +1,26 @@
 import { useRef, useEffect } from "react";
 import { TransformControls } from "@react-three/drei";
 import * as THREE from "three";
-
+import { useFrame } from "@react-three/fiber";
 const SectionPlanes = () => {
     const planeRef = useRef(new THREE.Plane(new THREE.Vector3(0, -1, 0), 0));
     const helperRef = useRef(null);
+    const meshRef = useRef(null);
 
-    // useEffect(() => {
-    //     if (!helperRef.current) return;
-        
-    //     // On every frame we sync helper position to plane constant
-    //     const updatePlane = () => {
-    //         if (!helperRef.current) return;
-            
-    //         // Get helper's world position
-    //         helperRef.current.updateMatrixWorld();
-    //         const position = new THREE.Vector3();
-    //         helperRef.current.getWorldPosition(position);
-
-    //         // Update the plane's constant
-    //         planeRef.current.constant = -position.y; // because normal is (0, -1, 0)
-    //     };
-
-    //     helperRef.current.addEventListener('change', updatePlane);
-
-    //     return () => {
-    //         helperRef.current?.removeEventListener('change', updatePlane);
-    //     };
-    // }, []);
+    useFrame(() => {
+        if (!meshRef.current) return;
+        console.log("i am in use frame")
+        meshRef.current.updateMatrixWorld();
+        const position = new THREE.Vector3();
+        meshRef.current.getWorldPosition(position);
+        console.log("helper ref's  position",position);
+        planeRef.current.constant = position.y; // because normal is (0, -1, 0)
+    })
 
     return (
-        <>
-            <TransformControls mode="translate">
-                <mesh ref={helperRef} position={[0, 0, 0]}>
+        <>  
+            <TransformControls mode="translate" ref={helperRef}>
+                <mesh ref={meshRef} visible={false}>
                     <boxGeometry args={[10, 10, 0.1]} />
                     <meshStandardMaterial color="red" />
                 </mesh>
