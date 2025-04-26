@@ -7,7 +7,7 @@ export const ThreejsCanvas = () => {
     return (
         <div
             style={{
-                backgroundColor: 'black',
+                backgroundColor: 'grey',
                 height: '100vh',
                 width: '100vw',
             }}
